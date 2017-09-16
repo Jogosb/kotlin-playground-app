@@ -1,9 +1,12 @@
-package com.filipradon.kotlinplaygroundapp
+package com.filipradon.kotlinplaygroundapp.ui.activities
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import com.filipradon.kotlinplaygroundapp.R
+import com.filipradon.kotlinplaygroundapp.data.Request
+import com.filipradon.kotlinplaygroundapp.ui.adapters.ForecastListAdapter
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
 import org.jetbrains.anko.longToast

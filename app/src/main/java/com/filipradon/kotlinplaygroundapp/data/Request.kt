@@ -1,4 +1,4 @@
-package com.filipradon.kotlinplaygroundapp
+package com.filipradon.kotlinplaygroundapp.data
 
 import android.util.Log
 import java.net.URL

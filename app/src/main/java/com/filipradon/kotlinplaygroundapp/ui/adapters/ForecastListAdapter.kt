@@ -1,4 +1,4 @@
-package com.filipradon.kotlinplaygroundapp
+package com.filipradon.kotlinplaygroundapp.ui.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
