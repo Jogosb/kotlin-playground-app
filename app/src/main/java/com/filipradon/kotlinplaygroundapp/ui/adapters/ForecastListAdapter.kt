@@ -11,7 +11,7 @@ import com.filipradon.kotlinplaygroundapp.domain.model.ForecastList
 class ForecastListAdapter(val weekForecast: ForecastList): RecyclerView.Adapter<ForecastListAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        with(weekForecast.dailyForecast[position]) {
+        with(weekForecast[position]) {
             holder.textView.text = "$date - $description - $high/$low"
         }
     }
@@ -20,7 +20,7 @@ class ForecastListAdapter(val weekForecast: ForecastList): RecyclerView.Adapter<
         return ViewHolder(TextView(parent.context))
     }
 
-    override fun getItemCount() = weekForecast.dailyForecast.size
+    override fun getItemCount() = weekForecast.size
 
     class ViewHolder(val textView: TextView): RecyclerView.ViewHolder(textView)
 }
