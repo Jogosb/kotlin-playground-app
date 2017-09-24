@@ -1,7 +1,7 @@
 package com.filipradon.kotlinplaygroundapp.domain.mappers
 
-import com.filipradon.kotlinplaygroundapp.data.Forecast
-import com.filipradon.kotlinplaygroundapp.data.ForecastResult
+import com.filipradon.kotlinplaygroundapp.data.server.Forecast
+import com.filipradon.kotlinplaygroundapp.data.server.ForecastResult
 import com.filipradon.kotlinplaygroundapp.domain.model.ForecastList
 import java.text.DateFormat
 import java.util.Calendar
@@ -15,9 +15,8 @@ import com.filipradon.kotlinplaygroundapp.domain.model.Forecast as ModelForecast
  */
 class ForecastDataMapper {
 
-    fun convertFromDataModel(forecastResult: ForecastResult): ForecastList {
-        return ForecastList(forecastResult.city.name, forecastResult.city.country,
-                convertForecastListToDomain(forecastResult.list))
+    fun convertFromDataModel(zipCode: Long, forecast: ForecastResult) = with(forecast) {
+        ForecastList(zipCode, city.name, city.country, convertForecastListToDomain(list))
     }
 
     fun convertForecastListToDomain(list: List<Forecast>): List<ModelForecast> {
@@ -27,10 +26,10 @@ class ForecastDataMapper {
         }
     }
 
-    private fun convertForecastItemToDomain(forecast: Forecast): ModelForecast {
-        return ModelForecast(convertDate(forecast.dt), forecast.weather[0].description,
-                forecast.temp.max.toInt(), forecast.temp.min.toInt(),
-                generateIconUrl(forecast.weather[0].icon))
+    private fun convertForecastItemToDomain(forecast: Forecast) = with(forecast) {
+
+        ModelForecast(dt, weather[0].description, temp.max.toInt(), temp.min.toInt(),
+                generateIconUrl(weather[0].icon))
     }
 
     private fun generateIconUrl(iconCode: String) = "http://openweathermap.org/img/w/$iconCode.png"

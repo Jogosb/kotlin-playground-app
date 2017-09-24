@@ -1,4 +1,4 @@
-package com.filipradon.kotlinplaygroundapp.data
+package com.filipradon.kotlinplaygroundapp.data.server
 
 /**
  * Created by filipradon on 16/09/17.
