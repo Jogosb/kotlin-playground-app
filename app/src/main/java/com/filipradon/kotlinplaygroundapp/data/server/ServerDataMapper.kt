@@ -1,7 +1,5 @@
-package com.filipradon.kotlinplaygroundapp.domain.mappers
+package com.filipradon.kotlinplaygroundapp.data.server
 
-import com.filipradon.kotlinplaygroundapp.data.server.Forecast
-import com.filipradon.kotlinplaygroundapp.data.server.ForecastResult
 import com.filipradon.kotlinplaygroundapp.domain.model.ForecastList
 import java.text.DateFormat
 import java.util.Calendar
@@ -13,9 +11,9 @@ import com.filipradon.kotlinplaygroundapp.domain.model.Forecast as ModelForecast
 /**
  * Created by filipradon on 16/09/17.
  */
-class ForecastDataMapper {
+class ServerDataMapper {
 
-    fun convertFromDataModel(zipCode: Long, forecast: ForecastResult) = with(forecast) {
+    fun convertToDomain(zipCode: Long, forecast: ForecastResult) = with(forecast) {
         ForecastList(zipCode, city.name, city.country, convertForecastListToDomain(list))
     }
 

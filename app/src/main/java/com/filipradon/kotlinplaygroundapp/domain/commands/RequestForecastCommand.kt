@@ -1,16 +1,19 @@
 package com.filipradon.kotlinplaygroundapp.domain.commands
 
-import com.filipradon.kotlinplaygroundapp.data.server.ForecastRequest
-import com.filipradon.kotlinplaygroundapp.domain.mappers.ForecastDataMapper
+import com.filipradon.kotlinplaygroundapp.domain.datasource.ForecastProvider
 import com.filipradon.kotlinplaygroundapp.domain.model.ForecastList
 
 /**
  * Created by filipradon on 16/09/17.
  */
-class RequestForecastCommand(val zipCode: Long): Command<ForecastList> {
+class RequestForecastCommand(val zipCode: Long, val forecastProvider: ForecastProvider = ForecastProvider())
+    : Command<ForecastList> {
+
+    companion object {
+        val DAYS = 7
+    }
 
     override fun execute(): ForecastList {
-        val forecastRequest = ForecastRequest(zipCode)
-        return ForecastDataMapper().convertFromDataModel(zipCode, forecastRequest.execute())
+        return forecastProvider.requestByZipCode(zipCode, DAYS)
     }
 }

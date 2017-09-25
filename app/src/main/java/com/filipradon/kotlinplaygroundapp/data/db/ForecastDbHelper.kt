@@ -3,10 +3,10 @@ package com.filipradon.kotlinplaygroundapp.data.db
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import com.filipradon.kotlinplaygroundapp.ui.ForecastApplication
-import org.jetbrains.anko.db.AUTOINCREMENT
 import org.jetbrains.anko.db.INTEGER
 import org.jetbrains.anko.db.ManagedSQLiteOpenHelper
 import org.jetbrains.anko.db.PRIMARY_KEY
+import org.jetbrains.anko.db.SqlType
 import org.jetbrains.anko.db.TEXT
 import org.jetbrains.anko.db.createTable
 import org.jetbrains.anko.db.dropTable
@@ -30,7 +30,7 @@ class ForecastDbHelper(ctx: Context = ForecastApplication.instance) : ManagedSQL
                 CityForecastTable.COUNTRY to TEXT)
 
         db.createTable(DayForecastTable.NAME, true,
-                DayForecastTable.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
+                DayForecastTable.ID to SqlType.create("INTEGER PRIMARY KEY AUTOINCREMENT"),
                 DayForecastTable.DATE to INTEGER,
                 DayForecastTable.DESCRIPTION to TEXT,
                 DayForecastTable.HIGH to INTEGER,
@@ -44,6 +44,4 @@ class ForecastDbHelper(ctx: Context = ForecastApplication.instance) : ManagedSQL
         db.dropTable(DayForecastTable.NAME, true)
         onCreate(db)
     }
-
-
 }
