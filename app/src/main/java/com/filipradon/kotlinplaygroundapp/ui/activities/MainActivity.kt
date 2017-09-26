@@ -8,8 +8,9 @@ import com.filipradon.kotlinplaygroundapp.domain.commands.RequestForecastCommand
 import com.filipradon.kotlinplaygroundapp.ui.adapters.ForecastListAdapter
 import kotlinx.android.synthetic.main.activity_main.forecastList
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.uiThread
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,7 +23,12 @@ class MainActivity : AppCompatActivity() {
         doAsync {
             val result = RequestForecastCommand(94043).execute()
             uiThread {
-                forecastList.adapter = ForecastListAdapter(result, { toast(it.description) })
+                val adapter = ForecastListAdapter(result) {
+                    startActivity<DetailsActivity>(DetailsActivity.ID to it.id,
+                            DetailsActivity.CITY_NAME to result.city)
+                }
+                forecastList.adapter = adapter
+                title = "${result.city} (${result.country})"
             }
         }
     }

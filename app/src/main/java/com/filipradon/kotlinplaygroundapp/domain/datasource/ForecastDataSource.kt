@@ -1,5 +1,6 @@
 package com.filipradon.kotlinplaygroundapp.domain.datasource
 
+import com.filipradon.kotlinplaygroundapp.domain.model.Forecast
 import com.filipradon.kotlinplaygroundapp.domain.model.ForecastList
 
 /**
@@ -8,5 +9,7 @@ import com.filipradon.kotlinplaygroundapp.domain.model.ForecastList
 interface ForecastDataSource {
 
     fun requestForecastByZipCode(zipCode: Long, date: Long): ForecastList?
+
+    fun requestDayForecast(id: Long): Forecast?
 
 }

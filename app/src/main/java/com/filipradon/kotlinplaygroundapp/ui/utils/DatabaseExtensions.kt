@@ -19,6 +19,10 @@ fun <T : Any> SelectQueryBuilder.parseOpt(
             override fun parseRow(columns: Map<String, Any?>): T = parser(columns)
         })
 
+fun SelectQueryBuilder.byId(id: Long)
+        = whereSimple("_id = ?", id.toString())
+
 fun SQLiteDatabase.clear(tableName: String) {
     execSQL("delete from $tableName")
 }
+

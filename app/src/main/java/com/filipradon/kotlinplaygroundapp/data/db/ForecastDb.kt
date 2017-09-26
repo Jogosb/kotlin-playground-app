@@ -1,7 +1,10 @@
 package com.filipradon.kotlinplaygroundapp.data.db
 
+import android.text.method.TextKeyListener.clear
 import com.filipradon.kotlinplaygroundapp.domain.datasource.ForecastDataSource
+import com.filipradon.kotlinplaygroundapp.domain.model.Forecast
 import com.filipradon.kotlinplaygroundapp.domain.model.ForecastList
+import com.filipradon.kotlinplaygroundapp.ui.utils.byId
 import com.filipradon.kotlinplaygroundapp.ui.utils.clear
 import com.filipradon.kotlinplaygroundapp.ui.utils.parseList
 import com.filipradon.kotlinplaygroundapp.ui.utils.parseOpt
@@ -30,6 +33,14 @@ class ForecastDb(
         if (city != null) dataMapper.convertToDomain(city) else null
 
     }
+
+    override fun requestDayForecast(id: Long): Forecast? = forecastDbHelper.use {
+        val forecast = select(DayForecastTable.NAME).byId(id).
+                parseOpt { DayForecast(HashMap(it)) }
+
+        if (forecast != null) dataMapper.convertDayToDomain(forecast) else null
+    }
+
 
     fun saveForecast(forecast: ForecastList) = forecastDbHelper.use {
         clear(CityForecastTable.NAME)

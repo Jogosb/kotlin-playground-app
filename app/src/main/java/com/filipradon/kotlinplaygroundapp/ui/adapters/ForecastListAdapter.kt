@@ -8,14 +8,13 @@ import com.filipradon.kotlinplaygroundapp.R
 import com.filipradon.kotlinplaygroundapp.domain.model.Forecast
 import com.filipradon.kotlinplaygroundapp.domain.model.ForecastList
 import com.filipradon.kotlinplaygroundapp.ui.utils.ctx
+import com.filipradon.kotlinplaygroundapp.ui.utils.toDateString
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_forecast.view.date
 import kotlinx.android.synthetic.main.item_forecast.view.description
 import kotlinx.android.synthetic.main.item_forecast.view.icon
 import kotlinx.android.synthetic.main.item_forecast.view.maxTemperature
 import kotlinx.android.synthetic.main.item_forecast.view.minTemperature
-import java.text.DateFormat
-import java.util.Locale
 
 /**
  * Created by filipradon on 16/09/17.
@@ -39,7 +38,7 @@ class ForecastListAdapter(val weekForecast: ForecastList, val itemClick: (Foreca
         fun bindForecast(forecast: Forecast) {
             with(forecast) {
                 Picasso.with(itemView.ctx).load(iconUrl).into(itemView.icon)
-                itemView.date.text = convertDate(date)
+                itemView.date.text = date.toDateString()
                 itemView.description.text = description
                 itemView.maxTemperature.text = "${high}º"
                 itemView.minTemperature.text = "${low}º"
@@ -47,9 +46,5 @@ class ForecastListAdapter(val weekForecast: ForecastList, val itemClick: (Foreca
             }
         }
 
-        private fun convertDate(date: Long): String {
-            val df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
-            return df.format(date)
-        }
     }
 }
