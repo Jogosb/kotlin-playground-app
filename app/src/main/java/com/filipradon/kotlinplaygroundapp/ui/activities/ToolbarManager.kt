@@ -8,6 +8,7 @@ import com.filipradon.kotlinplaygroundapp.ui.ForecastApplication
 import com.filipradon.kotlinplaygroundapp.ui.utils.ctx
 import com.filipradon.kotlinplaygroundapp.ui.utils.slideEnter
 import com.filipradon.kotlinplaygroundapp.ui.utils.slideExit
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
 /**
@@ -27,7 +28,7 @@ interface ToolbarManager {
         toolbar.inflateMenu(R.menu.menu_main)
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.action_settings -> ForecastApplication.instance.toast("Settings")
+                R.id.action_settings -> toolbar.ctx.startActivity<SettingsActivity>()
                 else -> ForecastApplication.instance.toast("Unknown option")
             }
             true

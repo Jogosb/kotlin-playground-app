@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar
 import com.filipradon.kotlinplaygroundapp.R
 import com.filipradon.kotlinplaygroundapp.domain.commands.RequestForecastCommand
 import com.filipradon.kotlinplaygroundapp.ui.adapters.ForecastListAdapter
+import com.filipradon.kotlinplaygroundapp.ui.utils.DelegatesExtensions
 import kotlinx.android.synthetic.main.activity_main.forecastList
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
@@ -15,6 +16,9 @@ import org.jetbrains.anko.uiThread
 
 
 class MainActivity : AppCompatActivity(), ToolbarManager {
+
+    private val zipCode: Long by DelegatesExtensions.preference(this, SettingsActivity.ZIP_CODE,
+            SettingsActivity.DEFAULT_ZIP)
 
     override val toolbar by lazy { find<Toolbar>(R.id.toolbar) }
 
@@ -26,8 +30,16 @@ class MainActivity : AppCompatActivity(), ToolbarManager {
         forecastList.layoutManager = LinearLayoutManager(this)
         attachToScroll(forecastList)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadForecast()
+    }
+
+    private fun loadForecast() {
         doAsync {
-            val result = RequestForecastCommand(94043).execute()
+            val result = RequestForecastCommand(zipCode).execute()
             uiThread {
                 val adapter = ForecastListAdapter(result) {
                     startActivity<DetailsActivity>(DetailsActivity.ID to it.id,
@@ -38,6 +50,4 @@ class MainActivity : AppCompatActivity(), ToolbarManager {
             }
         }
     }
-
-
 }
