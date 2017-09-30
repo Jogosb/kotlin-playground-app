@@ -2,8 +2,8 @@ package com.filipradon.kotlinplaygroundapp.ui.activities
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.widget.TextView
-
 import com.filipradon.kotlinplaygroundapp.R
 import com.filipradon.kotlinplaygroundapp.domain.commands.RequestDayForecastCommand
 import com.filipradon.kotlinplaygroundapp.domain.model.Forecast
@@ -17,10 +17,13 @@ import kotlinx.android.synthetic.main.activity_details.minTemperature
 import kotlinx.android.synthetic.main.activity_details.weatherDescription
 import org.jetbrains.anko.ctx
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.find
 import org.jetbrains.anko.uiThread
 import java.text.DateFormat
 
-class DetailsActivity : AppCompatActivity() {
+class DetailsActivity : AppCompatActivity(), ToolbarManager {
+
+    override val toolbar by lazy { find<Toolbar>(R.id.toolbar) }
 
     companion object {
         val ID = "DetailActivity:id"
@@ -31,7 +34,9 @@ class DetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
 
-        title = intent.getStringExtra(CITY_NAME)
+        initToolbar()
+        toolbarTitle = intent.getStringExtra(CITY_NAME)
+        enableHomeAsUp { onBackPressed() }
 
         doAsync {
             val result = RequestDayForecastCommand(intent.getLongExtra(ID, -1)).execute()
@@ -41,7 +46,7 @@ class DetailsActivity : AppCompatActivity() {
 
     private fun bindForecast(forecast: Forecast) = with(forecast) {
         Picasso.with(ctx).load(iconUrl).into(icon)
-        supportActionBar?.subtitle = date.toDateString(DateFormat.FULL)
+        toolbar.subtitle = date.toDateString(DateFormat.FULL)
         weatherDescription.text = description
         bindWeather(high to maxTemperature, low to minTemperature)
     }
