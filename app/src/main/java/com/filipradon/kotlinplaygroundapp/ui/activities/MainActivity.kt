@@ -6,13 +6,15 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import com.filipradon.kotlinplaygroundapp.R
 import com.filipradon.kotlinplaygroundapp.domain.commands.RequestForecastCommand
+import com.filipradon.kotlinplaygroundapp.domain.model.ForecastList
 import com.filipradon.kotlinplaygroundapp.ui.adapters.ForecastListAdapter
 import com.filipradon.kotlinplaygroundapp.ui.utils.DelegatesExtensions
 import kotlinx.android.synthetic.main.activity_main.forecastList
-import org.jetbrains.anko.doAsync
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.find
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.uiThread
 
 
 class MainActivity : AppCompatActivity(), ToolbarManager {
@@ -37,17 +39,17 @@ class MainActivity : AppCompatActivity(), ToolbarManager {
         loadForecast()
     }
 
-    private fun loadForecast() {
-        doAsync {
-            val result = RequestForecastCommand(zipCode).execute()
-            uiThread {
-                val adapter = ForecastListAdapter(result) {
-                    startActivity<DetailsActivity>(DetailsActivity.ID to it.id,
-                            DetailsActivity.CITY_NAME to result.city)
-                }
-                forecastList.adapter = adapter
-                toolbarTitle = "${result.city} (${result.country})"
-            }
+    private fun loadForecast() = async(UI) {
+        val result = bg { RequestForecastCommand(zipCode).execute() }
+        updateUI(result.await())
+    }
+
+    private fun updateUI(weekForecast: ForecastList) {
+        val adapter = ForecastListAdapter(weekForecast) {
+            startActivity<DetailsActivity>(DetailsActivity.ID to it.id,
+                    DetailsActivity.CITY_NAME to weekForecast.city)
         }
+        forecastList.adapter = adapter
+        toolbarTitle = "${weekForecast.city} (${weekForecast.country})"
     }
 }
